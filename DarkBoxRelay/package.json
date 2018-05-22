@@ -1,0 +1,9 @@
+{
+  "name": "dark-box-relay",
+  "version": "0.0.0",
+  "description": "DarkBoxRelay",
+  "main": "server.js",
+  "author": {
+    "name": "Taywon"
+  }
+}
