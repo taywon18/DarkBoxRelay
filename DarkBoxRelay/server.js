@@ -16,6 +16,7 @@ var server = http.createServer(function (request, response) {
     }
 
     if (request.method != 'POST') {
+        response.writeHead(200);
         response.end(JSON.stringify(
             {
                 "error": "This api only accept 'POST' requests."
@@ -30,6 +31,7 @@ var server = http.createServer(function (request, response) {
     request.on('end', function () {
         reqContainer[reqIdCounter] = response;
 
+        console.log("requête sur " + reqIdCounter);
         connection.send(JSON.stringify(
             {
                 "id": reqIdCounter,
@@ -56,8 +58,10 @@ wsServer.on('request', function (request) {
         let msgStr = (message.binaryData.toString('utf8'));
         let msg = JSON.parse(msgStr);
         let id = msg["id"];
+        console.log("Réponse sur " + id);
         let response = reqContainer[id];
 
+        response.writeHead(200);
         response.end(JSON.stringify(msg["data"]));
     });
 
