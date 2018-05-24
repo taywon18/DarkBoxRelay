@@ -28,7 +28,7 @@ var server = http.createServer(function (request, response) {
         body += data;
     });
     request.on('end', function () {
-        reqContainer[reqIdCounter] = request;
+        reqContainer[reqIdCounter] = response;
 
         connection.send(JSON.stringify(
             {
@@ -53,7 +53,12 @@ wsServer.on('request', function (request) {
     // This is the most important callback for us, we'll handle
     // all messages from users here.
     connection.on('message', function (message) {
-        console.log(message.binaryData.toString('utf8'));
+        let msgStr = (message.binaryData.toString('utf8'));
+        let msg = JSON.parse(msgStr);
+        let id = msg["id"];
+        let response = reqContainer[id];
+
+        response.end(JSON.stringify(msg["data"]));
     });
 
     connection.on('close', function (connection) {
